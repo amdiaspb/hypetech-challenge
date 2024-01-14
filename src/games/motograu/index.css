@@ -1,10 +1,6 @@
 .motograu-game {
-  background: linear-gradient(133deg,#00000017 0%,#1c101d 50%,#462948a2 100%)!important;
-}
-
-.motograu-game .transaction-bar {
-  --tw-bg-opacity: 0.20;
-  --tw-border-opacity: 0.20;
+  /* background: linear-gradient(133deg,#00000017 0%,#1c101d 50%,#462948a2 100%)!important; */
+  background-color: #121212;
 }
 
 .motograu-game .crash-form {
