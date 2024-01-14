@@ -1,4 +1,4 @@
-import Modal from '@/core/components/modal'
+import Modal from '@/games/motograu/components/modal'
 import {
   ArrowRightOnRectangleIcon,
   BanknotesIcon,
