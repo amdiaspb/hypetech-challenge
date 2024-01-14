@@ -54,7 +54,7 @@ git clone https://github.com/hypetechgames/frontend-challenge
 
 Acesse a pasta do projeto:
 ```bash
-cd frontend-challenge
+cd hypetech-challenge
 ```
 
 Instale as dependências do projeto:
