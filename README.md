@@ -47,7 +47,7 @@ Demostração e comparação de todos os elementos visuais ainda em construção
 
 ### 1. Clone o repositório:
 ```bash
-git clone https://github.com/hypetechgames/frontend-challenge
+git clone https://github.com/amdiaspb/hypetech-challenge.git
 ```
 
 ### 2. Instale as dependências e inicie o projeto
