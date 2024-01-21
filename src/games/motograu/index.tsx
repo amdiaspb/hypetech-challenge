@@ -1,6 +1,6 @@
 import './index.css'
 
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Display from './components/display'
 import Snackbar from '@/games/motograu/components/snackbar'
 import Results from '@/games/motograu/components/results'
@@ -10,6 +10,7 @@ import { CrashGameContext } from '@/core/providers/games/crash-game.provider'
 import { SessionContext } from '@/core/providers/session.provider'
 import { GameStatus } from '@/core/providers/enums/game-status'
 import Navbar from '@/games/motograu/components/navbar'
+import { Chat } from '@/games/motograu/components/chat'
 import bgFlag from '@/assets/background/motograu-flag.png'
 
 function HomePage() {
@@ -28,51 +29,51 @@ function HomePage() {
     )
   }, [iframeRef])
 
-  return (
-    <div className="flex min-h-screen overflow-hidden bg-gradient-to-r motograu-game font-sans">
-      <img src={bgFlag} alt="" className='absolute'/>
-      <div className="flex w-full sm:gap-3 min-h-screen relative">
-        <section className="flex flex-col h-full grow p-0">
+  const [showChat, setShowChat] = useState(false);
 
-          <div className="" style={{ zIndex: 100 }}>
-            <Navbar
-              game="motograu"
-              executeAction={executeAction}
-              balance={balance}
-            />
+  return (
+    <div className="flex min-h-screen relative motograu-game font-sans">
+
+      <img src={bgFlag} alt="" className='absolute'/>
+      
+      <div className="flex flex-col">
+
+        <Navbar
+          game="motograu"
+          executeAction={executeAction}
+          balance={balance}
+          showChat={showChat}
+          setShowChat={setShowChat}
+        />
+
+        <div className="flex flex-col-reverse lg:flex-row flex-auto p-3 pt-1 gap-3 rounded">
+          
+          <div className='flex-[1_1_0]'>
+            <TransactionBar />
           </div>
 
-          <div className="grid p-3 gap-3 grow rounded w-full grid-cols-12">
-            <div className="col-span-12 sm:col-span-4 grow xl:col-span-3 order-2 sm:order-1">
-              <TransactionBar />
-            </div>
-
-            <div className="relative col-span-12 sm:col-span-8 xl:col-span-9 order-1 sm:order-1 lg:order-2 p-1">
-              <div className="flex gap-3 h-full flex-col">
-
-                <div className="grow relative z-0">
-                  <iframe
-                    ref={iframeRef}
-                    className="rounded-md overflow-hidden w-full h-full pointer-events-none min-h-[250px] sm:min-h-[300px]"
-                    src="/motograu/index.html"
-                  ></iframe>
-                  <div className="bg-gray-700 hidden rounded-md overflow-hidden w-full h-full pointer-events-none min-h-[250px] sm:min-h-[300px]"></div>
-                  <div className="w-full h-full">
-                    <Display color={'pink'} />
-                  </div>
-                  <Snackbar />
-                </div>
-
-                <Results />
-
-                <Controls color="lime" position={'center'} />
-                
+          <div className="flex flex-col flex-[3_1_0] gap-3 p-1">
+            <div className='flex h-full'>
+              <div className="relative flex-[10_1_0] h-full overflow-hidden">
+                <iframe
+                  ref={iframeRef}
+                  className="w-full h-full min-h-[250px] sm:min-h-[300px] rounded-md pointer-events-none"
+                  src="/motograu/index.html"
+                />
+                <Display color={'pink'} />
+                <Snackbar />
               </div>
 
+              <Chat show={showChat}/>
             </div>
+
+            <Results />
+
+            <Controls color="lime" position={'center'} />
           </div>
-          
-        </section>
+
+        </div>
+        
       </div>
     </div>
   )

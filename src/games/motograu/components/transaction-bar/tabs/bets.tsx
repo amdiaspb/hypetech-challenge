@@ -27,20 +27,20 @@ export default function BetsTab() {
   return (
     <div className="flex flex-col flex-1">
 
-      <section className="py-4 px-3 w-full">
+      <section className="px-2.5 py-3 lg:px-3 lg:py-4 w-full">
         <div className="flex justify-between rounded bg-opacity-25 items-center ">
 
           <div className="flex flex-col">
-            <div className='text-xs text-stone-400'>Apostadores</div>
-            <div className="text-sm font-medium text-white">{registeredBets.length}</div>
+            <div className='leading-[15px] text-[11px] lg:text-xs text-stone-400'>Apostadores</div>
+            <div className="text-[13px] lg:text-sm font-medium text-white">{registeredBets.length}</div>
           </div>
 
           <div className="flex flex-col">
-            <div className='text-xs text-stone-400'>Total Apostado</div>
-            <div className="text-sm font-medium text-white">{sum(registeredBets)}</div>
+            <div className='leading-[15px] text-[11px] lg:text-xs text-stone-400'>Total Apostado</div>
+            <div className="text-[13px] lg:text-sm font-medium text-white">{sum(registeredBets)}</div>
           </div>
 
-          <div className='flex items-center gap-3 rounded-lg px-3 py-1.5 text-sm text-stone-400'>
+          <div className='flex items-center gap-2.5 lg:gap-3 rounded-lg px-1 lg:px-3 text-[13px] lg:text-sm text-stone-400'>
             <div className='rounded-full w-2 h-2 bg-green-400 shadow-[0_0_10px_2px_rgb(0,0,0,0.2)] shadow-green-500'/>
             <div><span className='text-white font-medium'>123</span> Online</div>
           </div>

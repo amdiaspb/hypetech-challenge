@@ -13,8 +13,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ['Poppins', 'sans-serif'],
-      numeric: ['Lato', 'mono']
+      sans: ['Poppins', 'sans-serif']
     },
     extend: {
       colors: {

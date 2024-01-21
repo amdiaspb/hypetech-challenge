@@ -33,11 +33,11 @@ export default function MultiplierResults({ variant }: Props) {
   }, [])
 
   return (
-    <div className="flex gap-2 w-full relative z-10">
+    <div className="relative">
 
 
       <If condition={!expand}>
-      <div className='absolute z-20 w-10 h-full right-14 bg-gradient-to-l from-[#121212] pointer-events-none' />
+        <div className='absolute z-10 w-10 h-full right-12 lg:right-14 bg-gradient-to-l from-[#121212] pointer-events-none' />
 
         {/* <button
           className={
@@ -51,33 +51,34 @@ export default function MultiplierResults({ variant }: Props) {
           Receba 10 gráus grátis agora!
         </button> */}
 
-        <div className="flex mr-14 items-center overflow-x-hidden gap-2">
-
-          {results?.map((result, idx) => {
-            return (
-              <Badge
-                key={idx}
-                showRoundInfo={showRoundInfo}
-                textColor={
-                  result.point < 2
-                    ? 'text-[#34b4ff]'
-                    : result.point < 10
-                    ? 'text-[#913ef8]'
-                    : 'text-[#c017b4]'
-                }
-                roundId={result.round_id}
-                multipler={result.point}
-              />
-            )
-          })}
+        <div className='relative h-8 mr-12 lg:mr-14 overflow-hidden'>
+          <div className="flex absolute gap-2">
+            {results?.map((result, idx) => {
+              return (
+                <Badge
+                  key={idx}
+                  showRoundInfo={showRoundInfo}
+                  textColor={
+                    result.point < 2
+                      ? 'text-[#34b4ff]'
+                      : result.point < 10
+                      ? 'text-[#913ef8]'
+                      : 'text-[#c017b4]'
+                  }
+                  roundId={result.round_id}
+                  multipler={result.point}
+                />
+              )
+            })}
           
+          </div>
         </div>
       </If>
 
       <If condition={expand}>
-        <div className="h-8"></div>
+        <div className="h-8"/>
         
-        <div className="h-auto absolute -bottom-1 w-full rounded-b-lg bg-[#121212] p-6">
+        <div className="h-auto z-20 absolute -bottom-1 w-full rounded-b-lg bg-[#121212] p-6">
           <div className="rounded-md">
             <h3 className="relative flex gap-2 font-medium text-sm w-fit pl-1 pr-2 pb-3 -mt-1 border-b-2 border-white/50 -mb-0.5 z-50 uppercase">
               <LuHistory className="h-5 w-5" strokeWidth={2} />
@@ -107,7 +108,7 @@ export default function MultiplierResults({ variant }: Props) {
         </div>
       </If>
 
-      <div className=" results-btn h-auto flex absolute top-0 right-1 mt-0 z-10 rounded-xl">
+      <div className=" results-btn h-auto flex absolute top-0 right-1 mt-0 z-20 rounded-xl">
         <button
           className={`flex h-8 py-3 px-3 items-center justify-center rounded-lg text-stone-400 hover:text-white text-xs font-semibold transition cursor-pointer`}
           onClick={(e) => setExpand(!expand)}

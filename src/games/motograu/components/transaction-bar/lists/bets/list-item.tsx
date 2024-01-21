@@ -25,11 +25,11 @@ export default function ListItem({ data }: Props) {
 
   return (
     <div
-      className={`flex items-center rounded mb-1.5 py-2 px-4 gap-1 text-xs ${
+      className={`flex items-center rounded mb-1.5 px-2.5 py-1.5 lg:px-4 lg:py-2 gap-1 text-[11px] lg:text-xs ${
         isGreen ? (data.payout < breakpoint[0]) ? 'bg-[#34b4ff]/5': (data.payout < breakpoint[1]) ? 'bg-[#913ef8]/5' : 'bg-[#c017b4]/5' : ''
       } `}
     >
-      <h1 className="w-1/4 flex gap-3 overflow-hidden items-center">
+      <h1 className="w-1/4 flex gap-2.5 lg:gap-3 overflow-hidden items-center">
         <img
           src={`https://api.multiavatar.com/${randomNumber}.svg`}
           className="w-5 h-5 rounded invert"
@@ -50,7 +50,7 @@ export default function ListItem({ data }: Props) {
         <If condition={data.outcome == 'win'}>
           <span
             className={
-              `flex items-center justify-center h-5 w-[52px] mx-auto rounded text-xs text-center border border-transparent text-gray-100 [text-shadow:1px_1px_1px_rgb(0_0_0_/_50%)]
+              `flex items-center justify-center h-5 w-[46px] lg:w-[52px] mx-auto rounded text-center border border-transparent text-gray-100 [text-shadow:1px_1px_1px_rgb(0_0_0_/_50%)]
                ${
                   (data.payout < breakpoint[0]) ? 'bg-[#34b4ff]/30' 
                   : (data.payout < breakpoint[1]) ? 'bg-[#a45aff]/30 shadow-[0_0_8px_1px_rgb(0,0,0,0.1)] shadow-[#a45aff]/30' 

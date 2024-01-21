@@ -1,25 +1,35 @@
-import React, { useContext, useState } from 'react'
-
-import If from '@/core/components/conditions/if'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import dayjs from 'dayjs'
+import { FaCrown, FaScroll } from "react-icons/fa";
 
 import EmojiPicker, {
   Theme,
   Categories,
   EmojiClickData,
 } from 'emoji-picker-react'
-import { FaceSmileIcon } from '@heroicons/react/24/outline'
+import { FaceSmileIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline'
 import { CrashGameContext } from '@/core/providers/games/crash-game.provider'
 import { IGameMessage } from '../../providers/interfaces/game-message.interface'
 import { dateToHumanReadable } from '@/core/helpers/date'
-type Props = {
-  show: boolean
-}
+
+type Props = { show: boolean };
 
 export const Chat = ({ show }: Props) => {
-  const { messages, sendMessage, session } =
-    useContext(CrashGameContext)
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const { messages, sendMessage, session } = useContext(CrashGameContext)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(null)
   const [message, setMessage] = useState<string>('')
+
+  const divRef = useRef(null);
+  const [users, setUsers] = useState({});
+  const [usersRank, setUsersRank] = useState({});
+  const colors = ['text-blue-400', 'text-red-400', 'text-red-400', 'text-yellow-400', 'text-orange-400', 'text-amber-400', 'text-lime-400', 'text-emerald-400', 'text-cyan-400', 'text-sky-400', 'text-indigo-400', 'text-violet-400', 'text-purple-400', 'text-fuchsia-400', 'text-pink-400', 'text-rose-400'];
+  const rankColors = ['text-orange-300', 'text-gray-300', 'text-yellow-300', 'text-teal-400'];
+
+  useEffect(() => {
+    setUsers(messages.reduce((o, i) => { if (!o[i.userId]) o[i.userId] = colors[(Math.floor(Math.random() * colors.length))]; return o; }, users));
+    setUsersRank(messages.reduce((o, i) => { if (!o[i.userId]) o[i.userId] = rankColors[(Math.floor(Math.random() * rankColors.length))]; return o; }, usersRank));
+    divRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [messages.length]);
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
     event.stopPropagation()
@@ -33,137 +43,67 @@ export const Chat = ({ show }: Props) => {
   }
 
   const attemptSendMessage = () => {
-    const parsed = message.trim()
-    setShowEmojiPicker(false)
+    const parsed = message.trim();
+    setShowEmojiPicker(false);
 
     if (parsed.length > 0) {
-      sendMessage(message)
-      setMessage('')
+      sendMessage(message);
+      setMessage('');
     }
   }
 
   const handleMessage = (e) => {
-    if (e.key && e.key.toUpperCase() == 'ENTER') attemptSendMessage()
-    else setMessage(e.target.value)
+    if (e.key && e.key.toUpperCase() == 'ENTER') {
+      e.preventDefault();
+      attemptSendMessage();
+    }
+    else setMessage(e.target.value);
   }
 
   return (
-    <If condition={show}>
-      <div className="w-80 text-sm p-2 rounded-r bg-[#161616] border-2 border-stone-800 absolute right-4 top-20 z-40  h-[50%] sm:h-[80%] md:h-[70%] lg:h-[63.55%]">
-        <div className="flex gap-2 flex-col relative h-full">
-          <div className="flex-shrink-1 p-2 flex-grow basis-0 overflow-y-scroll scrollbar-track-gray-600/20 scrollbar-thumb-gray-400/20 scrollbar scrollbar-track-rounded scrollbar-thumb-rounded">
-
-            {messages.map((data: IGameMessage, idx: number) => {
-              return (
-                <>
-                  <If condition={data.userId == session.userId}>
-                    <div className="chat chat-end" key={idx}>
-                      <div className="chat-image avatar">
-                        <div className="w-5 rounded-full">
-                          <img src="https://www.fiscalti.com.br/wp-content/uploads/2021/02/default-user-image.png" />
-                        </div>
-                      </div>
-
-                      <div className="chat-bubble min-h-0 bg-opacity-80 text-opacity-90">
-                        {data.message}
-                      </div>
-                      <div className="chat-footer text-xs opacity-50 mt-1">
-                        {dateToHumanReadable(data.createdAt)}
-                      </div>
-                    </div>
-                  </If>
-
-                  <If condition={data.userId != session.userId}>
-                    <div className="chat chat-start" key={idx}>
-                      <div className="chat-image avatar">
-                        <div className="w-5 rounded-full">
-                          <img src="https://www.fiscalti.com.br/wp-content/uploads/2021/02/default-user-image.png" />
-                        </div>
-                      </div>
-                      <div className="chat-bubble min-h-0 bg-opacity-80 text-opacity-90">
-                        {data.message}
-                      </div>
-                      <div className="chat-footer text-xs opacity-50 mt-0.5">
-                        {dateToHumanReadable(data.createdAt)}
-                      </div>
-                    </div>
-                  </If>
-                </>
-              )
-            })}
-          </div>
-
-          <div className="sticky bottom-2">
-            <If condition={showEmojiPicker}>
-              <div className="absolute bottom-10 w-full">
-                <EmojiPicker
-                  onEmojiClick={onClick}
-                  autoFocusSearch={false}
-                  height={'300px'}
-                  width={'100%'}
-                  previewConfig={{
-                    showPreview: false,
-                  }}
-                  theme={Theme.DARK}
-                  searchDisabled
-                  // skinTonePickerLocation={SkinTonePickerLocation.PREVIEW}
-                  // height={350}
-                  // width="50%"
-                  // emojiVersion="0.6"
-                  // lazyLoadEmojis={true}
-                  // previewConfig={{
-                  //   defaultCaption: 'Pick one!',
-                  //   defaultEmoji: '1f92a', // 🤪
-                  // }}
-                  // suggestedEmojisMode={SuggestionMode.RECENT}
-                  skinTonesDisabled
-                  // searchPlaceHolder="Filter"
-                  // defaultSkinTone={SkinTones.MEDIUM}
-                  // emojiStyle={EmojiStyle.NATIVE}
-                  categories={[
-                    {
-                      name: 'Smiles & Emotions',
-                      category: Categories.SMILEYS_PEOPLE,
-                    },
-                    {
-                      name: 'Fun and Games',
-                      category: Categories.ACTIVITIES,
-                    },
-
-                    {
-                      name: 'Flags',
-                      category: Categories.FLAGS,
-                    },
-                  ]}
-                />
-              </div>
-            </If>
-            <div className="form-control">
-              <div className="input-group">
-                <button
-                  className="btn btn-sm border-0 bg-opacity-50"
-                  onClick={(e) => handleShowEmojiPicker(e)}
-                >
-                  <FaceSmileIcon className="w-4 h-4" />
-                </button>
-                <input
-                  className="input input-sm w-full bg-opacity-80 focus:outline-none"
-                  value={message}
-                  onChange={handleMessage}
-                  onKeyDown={handleMessage}
-                />
-
-                <button
-                  className="btn btn-sm capitalize border-0 bg-opacity-50 font-medium"
-                  onClick={attemptSendMessage}
-                >
-                  Enviar
-                </button>
-              </div>
+    <div className={`font-chat relative group flex-[0_0_0] rounded-lg leading-[18px] text-[13px] font-light text-white border-stone-800 opacity-0 overflow-hidden transition-allduration-500 ${show && 'opacity-100 p-3 border-2 ml-4 flex-[3_1_0]'}`}>
+      <div className={`absolute top-1.5 left-0 right-0 bottom-14 flex flex-col overflow-y-scroll scrollbar-thin group-hover:scrollbar-thumb-stone-600 scrollbar-track-transparent`}>
+        
+        {messages.map((data: IGameMessage, idx: number) => 
+          <div key={idx} className='hover:bg-white/[15%] py-1.5 px-3 rounded break-words'>
+            <div>
+              {/* <span className='text-white/50'>{dayjs(data.createdAt).format('HH:mm')} </span> */}
+              <span className={`font-semibold cursor-pointer saturate-150 ${users[data.userId]}`}>
+                <FaCrown className={`inline mb-0.5 mr-1 w-[18px] h-[18px] ${usersRank[data.userId]}`}/>
+                Usuário {data.userId}:
+              </span>
+              <span> {data.message}</span>
             </div>
+            {dayjs().diff(dayjs(data.createdAt), 'hours') > 12 && <span className='text-white/50 text-xs'>{dateToHumanReadable(data.createdAt)}</span>}
+          </div>
+        )}
+
+        <div className='hover:bg-white/[15%] py-1.5 px-3 rounded break-words'>
+          <div>
+            <span className={`font-semibold cursor-pointer saturate-150 text-green-400`}>
+              <FaScroll className={'inline mb-0.5 mr-1 w-[18px] h-[18px] rounded text-green-400'}/>
+              Radahn:
+            </span>
+            <span> Não é permitido: 💳 dados pessoais 📲 contato 💸 pedir dinheiro 🤬 vocabulário impróprio 💩 flood 🛒 vender ou divulgar produtos 🤖 vender ou divulgar serviços 🕹️ promover plataformas terceiras.</span>
           </div>
         </div>
+
+        <div ref={divRef} />
       </div>
-    </If>
+
+      <div className='absolute bottom-3 left-3 right-3 bg-transparent border rounded border-white/20'>
+        <textarea 
+          className='h-9 w-full -mb-[5px] pr-8 overflow-hidden bg-transparent border-none resize-none focus:ring-0 leading-[18px] text-[13px] font-light placeholder:font-normal placeholder:text-white/60'
+          placeholder='Envie uma mensagem'
+          onChange={handleMessage}
+          onKeyDown={handleMessage}
+          value={message}
+        />
+        <PaperAirplaneIcon 
+          className={`w-6 absolute right-2 bottom-1.5 cursor-pointer transition duration-200 ${message ? 'text-white' : 'text-white/50'}`}
+          onClick={attemptSendMessage}
+        />
+      </div>
+    </div>
   )
 }

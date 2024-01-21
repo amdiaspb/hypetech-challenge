@@ -52,7 +52,7 @@ export default function Tabs({
         return (
           <a
             key={tab.key}
-            className={`tab tab-sm flex grow h-8 gap-1.5 items-center text-xs font-medium text-[#5e5e5e] ${
+            className={`tab tab-sm p-0 flex grow h-[30px] lg:h-8 gap-1.5 items-center text-[11.5px] lg:text-xs font-medium text-[#5e5e5e] ${
               active == tab.key
                 ? `rounded bg-[#121212] text-[#969696] [&>svg]:text-[#dddfdc]`
                 : 'hover:text-[#969696]'

@@ -16,7 +16,7 @@ export default function Footer() {
             onClick={() => setDialog(true)}
           >
             <ShieldCheckIcon className="text-green-500 h-4 w-4 mr-1" />{' '}
-            <small className="text-100-300">Provably Fair</small>
+            <small className="text-100-300 ">Provably Fair</small>
           </div>
         </div>
       </div>
