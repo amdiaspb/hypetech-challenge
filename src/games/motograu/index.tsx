@@ -31,10 +31,14 @@ function HomePage() {
 
   const [showChat, setShowChat] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = showChat ? 'hidden' : 'unset';
+  }, [showChat]);
+
   return (
     <div className="flex min-h-screen relative motograu-game font-sans">
 
-      <img src={bgFlag} alt="" className='absolute'/>
+      <img src={bgFlag} alt="Moto Grau Logo" className='hidden absolute lg:block'/>
       
       <div className="flex flex-col">
 
@@ -46,13 +50,13 @@ function HomePage() {
           setShowChat={setShowChat}
         />
 
-        <div className="flex flex-col-reverse lg:flex-row flex-auto p-3 pt-1 gap-3 rounded">
+        <div className="flex flex-col-reverse lg:flex-row flex-auto p-3 pt-0 gap-3 rounded">
           
           <div className='flex-[1_1_0]'>
             <TransactionBar />
           </div>
 
-          <div className="flex flex-col flex-[3_1_0] gap-3 p-1">
+          <div className="flex flex-col flex-[3_1_0] gap-3">
             <div className='flex h-full'>
               <div className="relative flex-[10_1_0] h-full overflow-hidden">
                 <iframe
@@ -64,7 +68,9 @@ function HomePage() {
                 <Snackbar />
               </div>
 
-              <Chat show={showChat}/>
+              <div className={`hidden lg:block lg:flex-[0_0_0] ${showChat && 'lg:flex-[3_1_0]'}`}>
+                <Chat show={showChat}/>
+              </div>
             </div>
 
             <Results />
@@ -75,6 +81,11 @@ function HomePage() {
         </div>
         
       </div>
+
+      <div className={`lg:hidden`}>
+        <Chat show={showChat}/>
+      </div>
+
     </div>
   )
 }

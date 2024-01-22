@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { CrashGameContext } from '@/core/providers/games/crash-game.provider'
-import {
-  QuestionMarkCircleIcon,
-  Bars3Icon,
-} from '@heroicons/react/24/outline'
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline'
 import { getGameLogo, getHowToPlay } from '@/core/helpers'
 import GameLimitsModal from '../provably-fair/game-limits'
+import { IoPersonCircleOutline, IoMusicalNotesSharp } from "react-icons/io5";
 import { FaRocketchat } from "react-icons/fa6";
-import { IoPersonCircleOutline } from "react-icons/io5";
 import { AiOutlineSound  } from "react-icons/ai";
-import { IoMusicalNotesSharp } from "react-icons/io5";
 import { MdOutlineSegment } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
 
@@ -103,8 +99,8 @@ export default function Navbar({
   });
   
   return (
-    <div className="z-10">
-      <div className="navbar pb-0 mx-auto my-auto px-2 lg:px-5 h-12 flex items-center w-full justify-end">
+    <div className="z-40 sticky top-0 w-full bg-[#121212] lg:relative lg:bg-transparent">
+      <div className="flex px-2 py-3 w-full justify-end">
         <h1 className="p-2 lg:hidden">{getGameLogo(game)}</h1>
 
         <div className="flex items-center ml-auto gap-1 lg:gap-2">
@@ -140,7 +136,7 @@ export default function Navbar({
             </button>
 
             {isDropdownOpen && (
-              <div className="mt-2 menu menu-compact p-4 space-y-4 bg-[#161616] border-2 border-stone-800 rounded w-[280px] max-w-[300px] absolute top-[41px] -right-1 z-10 shadow-[0px_0px_10px_3px_rgb(0,0,0,0.1)] shadow-black/40">
+              <div className="z-50 mt-2 menu menu-compact p-4 bg-[#161616] border-2 border-stone-800 rounded w-[280px] max-w-[300px] absolute top-[39px] right-1 z-10 shadow-[0px_0px_10px_3px_rgb(0,0,0,0.1)] shadow-black/40">
                 <div className="flex gap-4">
                   <img
                     src="https://api.multiavatar.com/NOME.svg"
@@ -158,67 +154,72 @@ export default function Navbar({
                   </div>
                 </div>
 
-                <div className='w-full h-[1px] bg-white/10'/>
+                <div className='w-full h-[1px] bg-white/10 my-4'/>
 
-                <div className="text-xs item">
-                  <div className="form-control">
-                    <label className="label hover:font-bold cursor-pointer p-0">
-                      <span className="label-text text-white text-[13px] font-light">
-                        <AiOutlineSound className='w-5 h-5 inline mr-2'/>
-                        Sons
-                      </span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={soundEnabled}
-                          onChange={handleSoundEnabled}
-                          className="sr-only peer"
-                        />
-                        <div className="w-8 h-4 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent rounded-full peer bg-black peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:left-[0px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                <div className='space-y-1.5'>
+                  <div className="text-xs item">
+                    <div className="form-control">
+                      <label className="label hover:font-bold cursor-pointer p-0">
+                        <span className="label-text text-white text-[13px] font-light">
+                          <AiOutlineSound className='w-5 h-5 inline mr-2'/>
+                          Sons
+                        </span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={soundEnabled}
+                            onChange={handleSoundEnabled}
+                            className="sr-only peer"
+                          />
+                          <div className="w-8 h-4 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent rounded-full peer bg-black peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:left-[0px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
                       </label>
-                    </label>
+                    </div>
                   </div>
-                </div>
-
-                <div className="item">
-                  <div className="form-control">
-                    <label className="label hover:font-bold cursor-pointer p-0">
-                      <span className="label-text text-white text-[13px] font-light">
-                        <IoMusicalNotesSharp className='w-5 h-5 inline mr-2'/>
-                        Música
-                      </span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={musicEnabled}
-                          onChange={handleMusicEnabled}
-                          className="sr-only peer"
-                        />
-                        <div className="w-8 h-4 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent rounded-full peer bg-black peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:left-[0px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  <div className="item">
+                    <div className="form-control">
+                      <label className="label hover:font-bold cursor-pointer p-0">
+                        <span className="label-text text-white text-[13px] font-light">
+                          <IoMusicalNotesSharp className='w-5 h-5 inline mr-2'/>
+                          Música
+                        </span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={musicEnabled}
+                            onChange={handleMusicEnabled}
+                            className="sr-only peer"
+                          />
+                          <div className="w-8 h-4 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-transparent rounded-full peer bg-black peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:left-[0px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
                       </label>
-                    </label>
+                    </div>
                   </div>
                 </div>
 
-                <div
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setShowGameLimitsModal(!showGameLimitsModal)
-                    soundClick()
-                  }}
-                >
-                  <div className="cursor-pointer text-white text-[13px] font-light">
-                    <MdOutlineSegment className='w-5 h-5 inline mr-2'/>
-                    Limites de Jogo
+                <div className='w-full h-[1px] bg-white/10 my-4'/>
+
+                <div className='space-y-1.5'>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setShowGameLimitsModal(!showGameLimitsModal)
+                      soundClick()
+                    }}
+                  >
+                    <div className="cursor-pointer text-white text-[13px] font-light">
+                      <MdOutlineSegment className='w-5 h-5 inline mr-2'/>
+                      Limites de Jogo
+                    </div>
+                  </div>
+
+                  <div className="cursor-pointer">
+                    <div className="cursor-pointer text-white text-[13px] font-light">
+                      <BiSupport className='w-5 h-5 inline mr-2'/>
+                      Suporte ao jogador Hypetech
+                    </div>
                   </div>
                 </div>
-
-                <a className="cursor-pointer" href="">
-                  <div className="cursor-pointer text-white text-[13px] font-light">
-                    <BiSupport className='w-5 h-5 inline mr-2'/>
-                    Suporte ao jogador Hypetech
-                  </div>
-                </a>
               </div>
             )}
           </div>

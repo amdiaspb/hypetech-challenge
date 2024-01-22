@@ -61,11 +61,16 @@ export const Chat = ({ show }: Props) => {
   }
 
   return (
-    <div className={`font-chat relative group flex-[0_0_0] rounded-lg leading-[18px] text-[13px] font-light text-white border-stone-800 opacity-0 overflow-hidden transition-allduration-500 ${show && 'opacity-100 p-3 border-2 ml-4 flex-[3_1_0]'}`}>
-      <div className={`absolute top-1.5 left-0 right-0 bottom-14 flex flex-col overflow-y-scroll scrollbar-thin group-hover:scrollbar-thumb-stone-600 scrollbar-track-transparent`}>
+    <div className={`
+      group z-20 pointer-events-none fixed left-0 top-16 w-screen h-[calc(100vh-4rem)] bg-[#121212]/90 backdrop-blur
+      leading-[18px] text-[13px] font-light text-white border-stone-800 opacity-0 overflow-hidden transition-all duration-500
+      lg:left-0 lg:top-0 lg:w-auto lg:h-full lg:relative lg:h-full lg:rounded-lg lg:transition-none
+      ${show && 'pointer-events-auto opacity-100 p-3 lg:ml-3 lg:border-2'}
+    `}>
+      <div className={`absolute border-white/20 top-1.5 left-0 right-0 bottom-14 flex flex-col overflow-y-scroll scrollbar-thin group-hover:scrollbar-thumb-stone-600 scrollbar-track-transparent`}>
         
         {messages.map((data: IGameMessage, idx: number) => 
-          <div key={idx} className='hover:bg-white/[15%] py-1.5 px-3 rounded break-words'>
+          <div key={idx} className='hover:bg-white/[15%] px-4 py-1.5 lg:px-3 rounded break-words'>
             <div>
               {/* <span className='text-white/50'>{dayjs(data.createdAt).format('HH:mm')} </span> */}
               <span className={`font-semibold cursor-pointer saturate-150 ${users[data.userId]}`}>
@@ -78,7 +83,7 @@ export const Chat = ({ show }: Props) => {
           </div>
         )}
 
-        <div className='hover:bg-white/[15%] py-1.5 px-3 rounded break-words'>
+        <div className='hover:bg-white/[15%] px-4 py-1.5 lg:px-3 rounded break-words'>
           <div>
             <span className={`font-semibold cursor-pointer saturate-150 text-green-400`}>
               <FaScroll className={'inline mb-0.5 mr-1 w-[18px] h-[18px] rounded text-green-400'}/>

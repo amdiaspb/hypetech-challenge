@@ -23,7 +23,7 @@ export default function TransactionBar({ variant }: Props) {
   ]
 
   return (
-    <div className="flex flex-col h-full p-1">
+    <div className="flex flex-col h-full">
       <div className="flex flex-col flex-1 transaction-bar min-h-[400px] w-full p-3 rounded-t-lg bg-[#161616] border-2 border-b-0 border-stone-800 relative ">
         
         <img src={motograuLogo} alt="logo" className='w-[145px] -mt-16 mb-2 self-center hidden lg:block' />
