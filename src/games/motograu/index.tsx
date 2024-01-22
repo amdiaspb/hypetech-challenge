@@ -52,11 +52,11 @@ function HomePage() {
 
         <div className="flex flex-col-reverse lg:flex-row flex-auto p-3 pt-0 gap-3 rounded">
           
-          <div className='flex-[1_1_0]'>
+          <div className='flex-[2.1_1_0]'>
             <TransactionBar />
           </div>
 
-          <div className="flex flex-col flex-[3_1_0] gap-3">
+          <div className="flex flex-col flex-[7_1_0] gap-3">
             <div className='flex h-full'>
               <div className="relative flex-[10_1_0] h-full overflow-hidden">
                 <iframe
