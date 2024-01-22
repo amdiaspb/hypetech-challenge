@@ -8,15 +8,37 @@ type Props = {
   color: string
 }
 
-export default function Display({ color }: Props) {
-  const { startTimeout, gameStatus, multiplier } =
-    useContext<any>(CrashGameContext)
-
+export default function Display({ color, previewMode }: Props) {
+  const { startTimeout, gameStatus, multiplier } = useContext(CrashGameContext);
   const bloom = (multiplier > 5)
     ? ['h-[166%] w-[166%]', 'bg-[#ff55aa]', 'bg-[#943162]', 'h-[250%]', 'bg-white/50']
     : (multiplier > 2) ? ['h-[133%] w-[133%]', 'bg-[#a45aff]', 'bg-[#603596]', 'h-[250%]', 'bg-[#603596]/30']
     : ['h-[100%] w-[100%]', 'bg-[#34b4ff]', 'bg-[#2277a8]', 'h-[200%]', 'bg-[#2277a8]/30']
   ;
+
+  const previewMult = [1, 2, 10];
+  const previewBloom = [
+    ['h-[100%] w-[100%]', 'bg-[#34b4ff]', 'bg-[#2277a8]', 'h-[200%]', 'bg-[#2277a8]/30'],
+    ['h-[133%] w-[133%]', 'bg-[#a45aff]', 'bg-[#603596]', 'h-[250%]', 'bg-[#603596]/30'],
+    ['h-[166%] w-[166%]', 'bg-[#ff55aa]', 'bg-[#943162]', 'h-[250%]', 'bg-white/50'],
+  ]
+
+  if (previewMode) return (
+    <div className="absolute top-0 left-0 flex gap-40 justify-center items-center w-full h-full pointer-events-none overflow-hidden">
+      { previewMult.map((m, i) => (
+        <div className="relative -top-40 flex justify-center items-center">
+          <div className={`absolute ${previewBloom[i][0]} rounded-full ${previewBloom[i][1]} blur-xl`}/>
+          <div className={`absolute ${previewBloom[i][0]} rounded-full ${previewBloom[i][2]} blur-xl mix-blend-hard-light`}/>
+          <div className={`absolute ${previewBloom[i][3]} aspect-square rounded-full ${previewBloom[i][4]} saturate-200 mix-blend-plus-lighter blur-[2px] animate-ping`}/>
+
+          <h1 className="text-6xl md:text-6xl lg:text-6xl font-semibold text-gray-200 drop-shadow [text-shadow:2px_2px_1px_rgb(0_0_0_/_100%)]">
+            {m?.toFixed(2)}x
+          </h1>
+        </div>
+        ))
+      }
+    </div>
+  );
 
   return (
     <div className="absolute top-0 left-0 flex flex-col gap-3 justify-center items-center w-full h-full pointer-events-none overflow-hidden">

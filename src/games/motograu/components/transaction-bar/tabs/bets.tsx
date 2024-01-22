@@ -4,7 +4,7 @@ import BetList from '../lists/bets'
 import { CrashGameContext } from '@/core/providers/games/crash-game.provider'
 import Header from '../lists/bets/header'
 
-export default function BetsTab() {
+export default function BetsTab({ previewMode }) {
   const { registeredBets, getRegisteredBets } =
     useContext(CrashGameContext)
 
@@ -50,7 +50,7 @@ export default function BetsTab() {
       <Header />
 
       <section className="h-full flex-shrink-1 flex-grow basis-0 overflow-y-scroll scrollbar-w-0 scrollbar-track-gray-400 scrollbar-thumb-gray-600 scrollbar scrollbar-track-rounded scrollbar-thumb-rounded">
-        <BetList items={registeredBets} />
+        <BetList items={registeredBets} previewMode={previewMode} />
       </section>
     </div>
   )

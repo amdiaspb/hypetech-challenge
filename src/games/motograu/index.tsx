@@ -35,6 +35,21 @@ function HomePage() {
     document.body.style.overflow = showChat ? 'hidden' : 'unset';
   }, [showChat]);
 
+  const [previewMode, setPreviewMode] = useState(true);
+
+  useEffect(() => {
+    function handleKeyDown(e) {
+      console.log(e.keyCode);
+      if (e.keyCode === 113) setPreviewMode(v => !v);
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return function cleanup() {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen relative motograu-game font-sans">
 
@@ -53,7 +68,7 @@ function HomePage() {
         <div className="flex flex-col-reverse lg:flex-row flex-auto p-3 pt-0 gap-3 rounded">
           
           <div className='flex-[2.1_1_0]'>
-            <TransactionBar />
+            <TransactionBar previewMode={previewMode}/>
           </div>
 
           <div className="flex flex-col flex-[7_1_0] gap-3">
@@ -64,12 +79,12 @@ function HomePage() {
                   className="w-full h-full min-h-[250px] sm:min-h-[300px] rounded-md pointer-events-none"
                   src="/motograu/index.html"
                 />
-                <Display color={'pink'} />
+                <Display color={'pink'} previewMode={previewMode} />
                 <Snackbar />
               </div>
 
-              <div className={`hidden lg:block lg:flex-[0_0_0] ${showChat && 'lg:flex-[3_1_0]'}`}>
-                <Chat show={showChat}/>
+              <div className={`lg:flex-[0_0_0] ${showChat && 'lg:flex-[3_1_0]'}`}>
+                <Chat show={showChat} previewMode={previewMode}/>
               </div>
             </div>
 
@@ -83,7 +98,7 @@ function HomePage() {
       </div>
 
       <div className={`lg:hidden`}>
-        <Chat show={showChat}/>
+        {/* <Chat show={showChat} previewMode={previewMode}/> */}
       </div>
 
     </div>

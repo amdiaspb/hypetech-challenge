@@ -13,7 +13,7 @@ type Props = {
   variant: string
 }
 
-export default function TransactionBar({ variant }: Props) {
+export default function TransactionBar({ variant, previewMode }: Props) {
   const [activeTab, setActiveTab] = useState('bets')
 
   const tabs: Tab[] = [
@@ -41,7 +41,7 @@ export default function TransactionBar({ variant }: Props) {
         </section>
 
         <If condition={activeTab == 'bets'}>
-          <BetsTab />
+          <BetsTab previewMode={previewMode}/>
         </If>
         <If condition={activeTab == 'history'}>
           <HistoryTab />
