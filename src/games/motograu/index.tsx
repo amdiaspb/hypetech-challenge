@@ -55,7 +55,7 @@ function HomePage() {
 
       <img src={bgFlag} alt="Moto Grau Logo" className='hidden absolute lg:block'/>
       
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col">
 
         <Navbar
           game="motograu"
