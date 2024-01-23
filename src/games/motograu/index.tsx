@@ -29,7 +29,7 @@ function HomePage() {
     )
   }, [iframeRef])
 
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
 
   useEffect(() => {
     document.body.style.overflow = showChat ? 'hidden' : 'unset';
@@ -90,7 +90,7 @@ function HomePage() {
 
             <Results />
 
-            <Controls color="lime" position={'center'} />
+            <Controls color="lime" position={'center'} previewMode={previewMode}/>
           </div>
 
         </div>

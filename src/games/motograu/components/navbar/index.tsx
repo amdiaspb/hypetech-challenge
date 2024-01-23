@@ -8,6 +8,7 @@ import { FaRocketchat } from "react-icons/fa6";
 import { AiOutlineSound  } from "react-icons/ai";
 import { MdOutlineSegment } from "react-icons/md";
 import { BiSupport } from "react-icons/bi";
+import { FaCrown } from "react-icons/fa";
 
 type Props = {
   game: string
@@ -104,17 +105,31 @@ export default function Navbar({
         <h1 className="p-2 lg:hidden">{getGameLogo(game)}</h1>
 
         <div className="flex items-center ml-auto gap-1 lg:gap-2">
+
           <button
             onClick={() => {
               setShowModal(!showModal)
               soundClick()
             }}
             //className="py-1 pl-3 pr-4 flex items-center text-yellow-950 bg-yellow-400 shadow-[0_0_8px_1px_rgb(0,0,0,0.1)] shadow-yellow-400/30 hover:shadow-yellow-300/60 hover:bg-yellow-300/95 border-0 gap-2 rounded-md capitalize text-sm font-medium"
-            className="px-0 lg:px-2 flex items-center text-yellow-300 gap-2 rounded-md text-sm font-medium transition" // border-yellow-800/80 hover:border-yellow-600/50 border-2
+            className="lg:absolute lg:left-[458px] py-1 lg:px-2 flex items-center text-yellow-300/90 border-yellow-300/20 hover:border-yellow-300/50 lg:border-2 gap-2 rounded-md text-sm font-medium transition" // border-yellow-800/80 hover:border-yellow-600/50 border-2
           >
             <QuestionMarkCircleIcon className="h-6 w-6" strokeWidth={2} />
             <span className="hidden sm:inline">Como Jogar?</span>
           </button>
+
+          <div className='hidden lg:flex flex-col mx-2 gap-1 text-sm tracking-wide'>
+            <div className='flex gap-5'>
+              <div className='flex gap-1.5 text-teal-300 saturate-[125%]'>
+                <FaCrown className='w-[18px] h-[18px]'/>
+                <div className='font-semibold'>Platina</div>
+              </div>
+              <div>Nível 80</div>
+            </div>
+            <div className='w-full h-1.5 rounded-sm bg-teal-200/20'>
+              <div className='w-[20%] h-full rounded-sm bg-teal-300 saturate-[125%]'/>
+            </div>
+          </div>
 
           <div className="flex items-center gap-2 mx-2 px-2 py-2 rounded-lg border-2 border-stone-800/80 text-[15px] text-center font-semibold">
             <small className='px-1.5 py-0.5 rounded bg-green-400/20 text-green-400'>BRL</small>

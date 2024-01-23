@@ -59,6 +59,7 @@ export default function CrashForm({
   hideSelf,
   color = 'lime',
   position,
+  previewMode
 }: Props) {
   if (color === 'custom-freestyle-v2') {
     // Set hideSelf to true and secondEnabled to false when color is blue
@@ -156,242 +157,476 @@ export default function CrashForm({
     maximumFractionDigits: 2
   });
 
-  return (
-    <div className="bg-[#161616] border-2 border-stone-800 w-full md:w-1/2 flex rounded-md p-3 md:p-5 relative">
-      <If condition={toggleSecond && !secondEnabled}>
-        <button
-          onClick={toggleSecond}
-          className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
+  if (previewMode) return (
+    <div className={'w-full flex gap-3'}>
+      <div className={`bg-[#161616] border-2 border-stone-800 flex rounded-md p-3 md:p-5 relative flex-1 grow-[2.5]`}>
+        <If condition={toggleSecond && !secondEnabled}>
+          <button
+            onClick={toggleSecond}
+            className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
+          >
+            <PlusIcon className="h-4 w-4" />
+          </button>
+        </If>
+        <If condition={hideSelf}>
+          <button
+            onClick={() => hideSelf()}
+            className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
+          >
+            <MinusIcon className="h-4 w-4" />
+          </button>
+        </If>
+        <form
+          ref={formRef}
+          method="POST"
+          className="w-full mx-auto justify-center"
+          onSubmit={(e) => submitTransaction(e)}
         >
-          <PlusIcon className="h-4 w-4" />
-        </button>
-      </If>
-
-      <If condition={hideSelf}>
-        <button
-          onClick={() => hideSelf()}
-          className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
-        >
-          <MinusIcon className="h-4 w-4" />
-        </button>
-      </If>
-
-      <form
-        ref={formRef}
-        method="POST"
-        className="w-full mx-auto justify-center"
-        onSubmit={(e) => submitTransaction(e)}
-      >
-        {/* <input type="hidden" name="teste" /> */}
-
-        <div className="w-full flex justify-center mb-2 md:hidden">
-          <div className="w-full">
-            <Tabs
-              tabs={tabs}
-              size="w-1/2"
-              active={transaction.mode}
-              toggle={updateMode}
-              variant={'gray'}
-            />
-          </div>
-        </div>
-
-        <section className="flex mx-auto gap-3 md:gap-5">
-
-          <div className="flex flex-col w-1/2 lg:w-[60%]">
-
-            <div className="w-full md:flex justify-center mb-2 hidden">
-              <div className="w-full">
-                <Tabs
-                  tabs={tabs}
-                  size="w-1/2"
-                  active={transaction.mode}
-                  toggle={updateMode}
-                  variant={'gray'}
-                />
-              </div>
+          {/* <input type="hidden" name="teste" /> */}
+          <div className="w-full flex justify-center mb-2 md:hidden">
+            <div className="w-full">
+              <Tabs
+                tabs={tabs}
+                size="w-1/2"
+                active={transaction.mode}
+                toggle={updateMode}
+                variant={'gray'}
+              />
             </div>
-
-            <div className='flex gap-2 flex-wrap lg:flex-nowrap'>
-              <div className="w-full lg:w-1/2">
-                <TextField
-                  id="valueInput"
-                  name="amount"
-                  disabled={
-                    transaction.status !=
-                    TransactionStatus.UNREGISTERED
-                  }
-                  value={transaction.amount}
-                  setValue={updateAmount}
-                  label="Valor"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2 w-full lg:w-1/2">
-
-                <div className="flex gap-2 h-1/2">
-                  <button
-                    onClick={divideAmount}
-                    type="button"
-                    disabled={
-                      transaction.status !=
-                      TransactionStatus.UNREGISTERED
-                    }
-                    className="w-full h-full rounded text-xl font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
-                  >
-                    &frac12;
-                  </button>
-                  <button
-                    onClick={doubleAmount}
-                    type="button"
-                    disabled={
-                      transaction.status !=
-                      TransactionStatus.UNREGISTERED
-                    }
-                    className="w-full h-full rounded font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
-                  >
-                    2x
-                  </button>
+          </div>
+          <section className="flex mx-auto gap-3 md:gap-5">
+            <div className="flex flex-col w-1/2 lg:w-[60%]">
+              <div className="w-full md:flex justify-center mb-2 hidden">
+                <div className="w-full">
+                  <Tabs
+                    tabs={tabs}
+                    size="w-1/2"
+                    active={transaction.mode}
+                    toggle={updateMode}
+                    variant={'gray'}
+                  />
                 </div>
-
-                <div className="flex gap-2 h-1/2">
+              </div>
+              <div className='flex gap-2 flex-wrap lg:flex-nowrap'>
+                <div className="w-full lg:w-1/2">
                   <TextField
                     id="valueInput"
                     name="amount"
                     disabled={
-                      transaction.status != TransactionStatus.UNREGISTERED
+                      transaction.status !=
+                      TransactionStatus.UNREGISTERED
                     }
-                    value={transaction.exitValue}
-                    setValue={updateExitValue}
-                    label="Auto Retirar"
+                    value={transaction.amount}
+                    setValue={updateAmount}
+                    label="Valor"
                   />
-
-                  <If condition={transaction.mode == TransactionMode.AUTO}>
-                    <TextField
-                      id="valueInput"
-                      name="amount"
+                </div>
+                <div className="flex flex-col gap-2 w-full lg:w-1/2">
+                  <div className="flex gap-2 h-1/2">
+                    <button
+                      onClick={divideAmount}
+                      type="button"
                       disabled={
                         transaction.status !=
                         TransactionStatus.UNREGISTERED
                       }
-                      value={transaction.roundCount}
-                      setValue={updateRoundCount}
-                      label="Quantidade"
+                      className="w-full h-full rounded text-xl font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
+                    >
+                      &frac12;
+                    </button>
+                    <button
+                      onClick={doubleAmount}
+                      type="button"
+                      disabled={
+                        transaction.status !=
+                        TransactionStatus.UNREGISTERED
+                      }
+                      className="w-full h-full rounded font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
+                    >
+                      2x
+                    </button>
+                  </div>
+                  <div className="flex gap-2 h-1/2">
+                    <TextField
+                      id="valueInput"
+                      name="amount"
+                      disabled={
+                        transaction.status != TransactionStatus.UNREGISTERED
+                      }
+                      value={transaction.exitValue}
+                      setValue={updateExitValue}
+                      label="Auto Retirar"
                     />
-                  </If>
+                    <If condition={transaction.mode == TransactionMode.AUTO}>
+                      <TextField
+                        id="valueInput"
+                        name="amount"
+                        disabled={
+                          transaction.status !=
+                          TransactionStatus.UNREGISTERED
+                        }
+                        value={transaction.roundCount}
+                        setValue={updateRoundCount}
+                        label="Quantidade"
+                      />
+                    </If>
+                  </div>
                 </div>
               </div>
+      
             </div>
-            
-          </div>
-
-          <div className="w-1/2 lg:w-[40%]">
-            <If
-              condition={
-                transaction == null ||
-                transaction?.status == TransactionStatus.UNREGISTERED
-              }
-            >
-              <button
-                className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
-                text-white saturate-200 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[300%]
-                bg-gradient-to-b from-emerald-600 to-emerald-800 border-2 border-emerald-700 uppercase
-              `}
-            >
-              <span>
-                {transaction.mode == TransactionMode.COMMON ? 'Apostar' : 'Aposta Auto'}
-              </span>
-              
-              <span className="-mt-1 text-xl">
-                {formatter.format(transaction.amount)}
-                <small className='text-emerald-300'> BRL</small>
-              </span>
-              </button>
-            </If>
-
-            <If
-              condition={
-                gameStatus != GameStatus.RUNNING &&
-                transaction?.status == TransactionStatus.REGISTERED
-              }
-            >
-              <button
-                className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
-                  text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
-                  bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
-                `}
-                onClick={() => cancelTransaction(position)}
+            <div className="w-1/2 lg:w-[40%]">
+              <If
+                condition={
+                  transaction == null ||
+                  transaction?.status == TransactionStatus.UNREGISTERED
+                }
               >
-                <If condition={transaction.autoStarted}>
-                  <span>Cancelar ({transaction.roundCount + 1})</span>
-                </If>
-
-                <If condition={!transaction.autoStarted}>
-                  <span>Cancelar</span>
-                </If>
-
-                <span className="-mt-1 text-xl font-semibold">
-                  {formatter.format(transaction.amount)}
-                  <small className='text-red-300'> BRL</small>
+                <button
+                  className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+                  text-white saturate-200 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[300%]
+                  bg-gradient-to-b from-emerald-600 to-emerald-800 border-2 border-emerald-700 uppercase
+                `}
+              >
+                <span>
+                  {transaction.mode == TransactionMode.COMMON ? 'Apostar' : 'Aposta Auto'}
                 </span>
-              </button>
-            </If>
-
-            <If
-              condition={
-                gameStatus != GameStatus.IDLE &&
-                transaction?.status == TransactionStatus.PENDING
-              }
-            >
-              <div className="flex flex-col w-full h-full">
+      
+                <span className="-mt-1 text-xl">
+                  {formatter.format(transaction.amount)}
+                  <small className='text-emerald-300'> BRL</small>
+                </span>
+                </button>
+              </If>
+              <If
+                condition={
+                  gameStatus != GameStatus.RUNNING &&
+                  transaction?.status == TransactionStatus.REGISTERED
+                }
+              >
                 <button
                   className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
                     text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
                     bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
                   `}
-                  onClick={cancelFuterTransaction}
+                  onClick={() => cancelTransaction(position)}
                 >
                   <If condition={transaction.autoStarted}>
-                    <span>Cancelar ({transaction.roundCount})</span>
+                    <span>Cancelar ({transaction.roundCount + 1})</span>
                   </If>
-
                   <If condition={!transaction.autoStarted}>
-                    <span className="-mt-1 text-xl">Cancelar</span>
+                    <span>Cancelar</span>
                   </If>
+                  <span className="-mt-1 text-xl font-semibold">
+                    {formatter.format(transaction.amount)}
+                    <small className='text-red-300'> BRL</small>
+                  </span>
+                </button>
+              </If>
+              <If
+                condition={
+                  gameStatus != GameStatus.IDLE &&
+                  transaction?.status == TransactionStatus.PENDING
+                }
+              >
+                <div className="flex flex-col w-full h-full">
+                  <button
+                    className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+                      text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+                      bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
+                    `}
+                    onClick={cancelFuterTransaction}
+                  >
+                    <If condition={transaction.autoStarted}>
+                      <span>Cancelar ({transaction.roundCount})</span>
+                    </If>
+                    <If condition={!transaction.autoStarted}>
+                      <span className="-mt-1 text-xl">Cancelar</span>
+                    </If>
+                  </button>
+                </div>
+              </If>
+              <If
+                condition={
+                  gameStatus == GameStatus.RUNNING &&
+                  transaction?.status == TransactionStatus.REGISTERED
+                }
+              >
+                <button
+                  className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+                    text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+                    bg-gradient-to-b from-amber-500 to-amber-700 border-2 border-amber-600 uppercase
+                    shadow-[0_0_5px_2px_rgb(0,0,0,0.1)] shadow-amber-500/40
+                  `}
+                  onClick={() => cashOut(position)}
+                >
+                  <If condition={transaction.autoStarted}>
+                    <span>Retirar ({transaction.roundCount + 1})</span>
+                  </If>
+                  <If condition={!transaction.autoStarted}>
+                    <span>Retirar</span>
+                  </If>
+                  <span className="-mt-1 text-xl">
+                    {formatter.format(transaction.amount * multiplier)}
+                    <small className='text-amber-300'> BRL</small>
+                  </span>
+                </button>
+              </If>
+            </div>
+          </section>
+        </form>
+      </div>
+
+      <div className={`bg-[#161616] border-2 border-stone-800 flex rounded-md p-3 md:p-5 relative flex-1`}>
+        <button
+          className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+            text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+            bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
+          `}
+        >
+          <span>Cancelar</span>
+          <span className="-mt-1 text-xl font-semibold">
+            {formatter.format(transaction.amount)}
+            <small className='text-red-300'> BRL</small>
+          </span>
+        </button>
+      </div>
+
+      <div className={`bg-[#161616] border-2 border-stone-800 flex rounded-md p-3 md:p-5 relative flex-1`}>
+        <button
+          className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+            text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+            bg-gradient-to-b from-amber-500 to-amber-700 border-2 border-amber-600 uppercase
+            shadow-[0_0_10px_3px_rgb(0,0,0,0.1)] shadow-amber-500/50
+          `}
+        >
+          <span>Retirar</span>
+          <span className="-mt-1 text-xl">
+            {formatter.format(transaction.amount * multiplier)}
+            <small className='text-amber-300'> BRL</small>
+          </span>
+        </button>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className={`bg-[#161616] border-2 border-stone-800 flex rounded-md p-3 md:p-5 relative ${previewMode ? 'flex-1 grow-[2.5]' : 'w-full md:w-1/2'}`}>
+    <If condition={toggleSecond && !secondEnabled}>
+      <button
+        onClick={toggleSecond}
+        className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
+      >
+        <PlusIcon className="h-4 w-4" />
+      </button>
+    </If>
+    <If condition={hideSelf}>
+      <button
+        onClick={() => hideSelf()}
+        className={`btn border-none bg-stone-800 btn-xs btn-circle absolute rounded-tr-lg right-0 top-0 z-10`}
+      >
+        <MinusIcon className="h-4 w-4" />
+      </button>
+    </If>
+    <form
+      ref={formRef}
+      method="POST"
+      className="w-full mx-auto justify-center"
+      onSubmit={(e) => submitTransaction(e)}
+    >
+      {/* <input type="hidden" name="teste" /> */}
+      <div className="w-full flex justify-center mb-2 md:hidden">
+        <div className="w-full">
+          <Tabs
+            tabs={tabs}
+            size="w-1/2"
+            active={transaction.mode}
+            toggle={updateMode}
+            variant={'gray'}
+          />
+        </div>
+      </div>
+      <section className="flex mx-auto gap-3 md:gap-5">
+        <div className="flex flex-col w-1/2 lg:w-[60%]">
+          <div className="w-full md:flex justify-center mb-2 hidden">
+            <div className="w-full">
+              <Tabs
+                tabs={tabs}
+                size="w-1/2"
+                active={transaction.mode}
+                toggle={updateMode}
+                variant={'gray'}
+              />
+            </div>
+          </div>
+          <div className='flex gap-2 flex-wrap lg:flex-nowrap'>
+            <div className="w-full lg:w-1/2">
+              <TextField
+                id="valueInput"
+                name="amount"
+                disabled={
+                  transaction.status !=
+                  TransactionStatus.UNREGISTERED
+                }
+                value={transaction.amount}
+                setValue={updateAmount}
+                label="Valor"
+              />
+            </div>
+            <div className="flex flex-col gap-2 w-full lg:w-1/2">
+              <div className="flex gap-2 h-1/2">
+                <button
+                  onClick={divideAmount}
+                  type="button"
+                  disabled={
+                    transaction.status !=
+                    TransactionStatus.UNREGISTERED
+                  }
+                  className="w-full h-full rounded text-xl font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
+                >
+                  &frac12;
+                </button>
+                <button
+                  onClick={doubleAmount}
+                  type="button"
+                  disabled={
+                    transaction.status !=
+                    TransactionStatus.UNREGISTERED
+                  }
+                  className="w-full h-full rounded font-medium disabled:cursor-not-allowed disabled:text-white/20 bg-[#121212] border-2 border-stone-800/60"
+                >
+                  2x
                 </button>
               </div>
-            </If>
-
-            <If
-              condition={
-                gameStatus == GameStatus.RUNNING &&
-                transaction?.status == TransactionStatus.REGISTERED
-              }
+              <div className="flex gap-2 h-1/2">
+                <TextField
+                  id="valueInput"
+                  name="amount"
+                  disabled={
+                    transaction.status != TransactionStatus.UNREGISTERED
+                  }
+                  value={transaction.exitValue}
+                  setValue={updateExitValue}
+                  label="Auto Retirar"
+                />
+                <If condition={transaction.mode == TransactionMode.AUTO}>
+                  <TextField
+                    id="valueInput"
+                    name="amount"
+                    disabled={
+                      transaction.status !=
+                      TransactionStatus.UNREGISTERED
+                    }
+                    value={transaction.roundCount}
+                    setValue={updateRoundCount}
+                    label="Quantidade"
+                  />
+                </If>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+        <div className="w-1/2 lg:w-[40%]">
+          <If
+            condition={
+              transaction == null ||
+              transaction?.status == TransactionStatus.UNREGISTERED
+            }
+          >
+            <button
+              className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+              text-white saturate-200 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[300%]
+              bg-gradient-to-b from-emerald-600 to-emerald-800 border-2 border-emerald-700 uppercase
+            `}
+          >
+            <span>
+              {transaction.mode == TransactionMode.COMMON ? 'Apostar' : 'Aposta Auto'}
+            </span>
+  
+            <span className="-mt-1 text-xl">
+              {formatter.format(transaction.amount)}
+              <small className='text-emerald-300'> BRL</small>
+            </span>
+            </button>
+          </If>
+          <If
+            condition={
+              gameStatus != GameStatus.RUNNING &&
+              transaction?.status == TransactionStatus.REGISTERED
+            }
+          >
+            <button
+              className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+                text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+                bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
+              `}
+              onClick={() => cancelTransaction(position)}
             >
+              <If condition={transaction.autoStarted}>
+                <span>Cancelar ({transaction.roundCount + 1})</span>
+              </If>
+              <If condition={!transaction.autoStarted}>
+                <span>Cancelar</span>
+              </If>
+              <span className="-mt-1 text-xl font-semibold">
+                {formatter.format(transaction.amount)}
+                <small className='text-red-300'> BRL</small>
+              </span>
+            </button>
+          </If>
+          <If
+            condition={
+              gameStatus != GameStatus.IDLE &&
+              transaction?.status == TransactionStatus.PENDING
+            }
+          >
+            <div className="flex flex-col w-full h-full">
               <button
                 className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
                   text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
-                  bg-gradient-to-b from-amber-500 to-amber-700 border-2 border-amber-600 uppercase
-                  shadow-[0_0_5px_2px_rgb(0,0,0,0.1)] shadow-amber-500/40 
+                  bg-gradient-to-b from-red-600 to-red-800 border-2 border-red-700 uppercase
                 `}
-                onClick={() => cashOut(position)}
+                onClick={cancelFuterTransaction}
               >
                 <If condition={transaction.autoStarted}>
-                  <span>Retirar ({transaction.roundCount + 1})</span>
+                  <span>Cancelar ({transaction.roundCount})</span>
                 </If>
-
                 <If condition={!transaction.autoStarted}>
-                  <span>Retirar</span>
+                  <span className="-mt-1 text-xl">Cancelar</span>
                 </If>
-                <span className="-mt-1 text-xl">
-                  {formatter.format(transaction.amount * multiplier)}
-                  <small className='text-amber-300'> BRL</small>
-                </span>
               </button>
-            </If>
-          </div>
-        </section>
-      </form>
-    </div>
+            </div>
+          </If>
+          <If
+            condition={
+              gameStatus == GameStatus.RUNNING &&
+              transaction?.status == TransactionStatus.REGISTERED
+            }
+          >
+            <button
+              className={`relative flex flex-col h-full w-full justify-center items-center rounded-xl font-medium
+                text-white saturate-100 [text-shadow:2px_2px_2px_rgb(0_0_0_/_40%)] transition hover:saturate-[125%]
+                bg-gradient-to-b from-amber-500 to-amber-700 border-2 border-amber-600 uppercase
+                shadow-[0_0_5px_2px_rgb(0,0,0,0.1)] shadow-amber-500/40
+              `}
+              onClick={() => cashOut(position)}
+            >
+              <If condition={transaction.autoStarted}>
+                <span>Retirar ({transaction.roundCount + 1})</span>
+              </If>
+              <If condition={!transaction.autoStarted}>
+                <span>Retirar</span>
+              </If>
+              <span className="-mt-1 text-xl">
+                {formatter.format(transaction.amount * multiplier)}
+                <small className='text-amber-300'> BRL</small>
+              </span>
+            </button>
+          </If>
+        </div>
+      </section>
+    </form>
+  </div>
   )
 }

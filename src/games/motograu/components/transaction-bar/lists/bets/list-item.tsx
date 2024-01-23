@@ -15,7 +15,7 @@ export default function ListItem({ data }: Props) {
     style: 'currency',
     currency: 'BRL' 
   });
-  const breakpoint = [2, 5];
+  const breakpoint = [2, 10];
 
   // Gere o número aleatório uma única vez quando o componente for montado
   useEffect(() => {
@@ -74,9 +74,7 @@ export default function ListItem({ data }: Props) {
         {!data.profit && <span className='font-medium'>-</span>}
 
         <If condition={isGreen}>
-          {data.profit !== undefined && typeof data.profit === 'number'
-            ? formatter.format(data.profit)
-            : '0,00'}
+          {formatter.format(data.profit)}
         </If>
       </div>
 

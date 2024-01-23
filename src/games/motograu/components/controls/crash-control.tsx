@@ -6,11 +6,11 @@ type Props = {
   color: string
 }
 
-export default function CrashControl({ color }: Props) {
+export default function CrashControl({ color, previewMode }: Props) {
   return (
     <div className="w-full flex justify-center flex-wrap md:flex-nowrap">
       <MobileControl color={color} />
-      <DesktopControl color={color} />
+      <DesktopControl color={color} previewMode={previewMode} />
     </div>
   )
 }

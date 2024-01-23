@@ -25,12 +25,15 @@ export const Chat = ({ show, previewMode }: Props) => {
   const [users, setUsers] = useState({});
   const [usersRank, setUsersRank] = useState({});
   const colors = ['text-blue-400', 'text-red-400', 'text-red-400', 'text-yellow-400', 'text-orange-400', 'text-amber-400', 'text-lime-400', 'text-emerald-400', 'text-cyan-400', 'text-sky-400', 'text-indigo-400', 'text-violet-400', 'text-purple-400', 'text-fuchsia-400', 'text-pink-400', 'text-rose-400'];
-  const rankColors = ['text-orange-300', 'text-gray-300', 'text-yellow-300', 'text-teal-400'];
+  const rankColors = ['text-orange-300', 'text-gray-300', 'text-yellow-300', 'text-teal-300'];
 
   useEffect(() => {
     setUsers(currMessages.reduce((o, i) => { if (!o[i.userId]) o[i.userId] = colors[(Math.floor(Math.random() * colors.length))]; return o; }, users));
     setUsersRank(currMessages.reduce((o, i) => { if (!o[i.userId]) o[i.userId] = rankColors[(Math.floor(Math.random() * rankColors.length))]; return o; }, usersRank));
     divRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (previewMode) {
+      if (currMessages.length >= 20) currMessages.splice(0, currMessages.length - 20);
+    } 
   }, [currMessages.length]);
 
   function onClick(emojiData: EmojiClickData, event: MouseEvent) {
@@ -129,8 +132,9 @@ export const Chat = ({ show, previewMode }: Props) => {
       };
 
       const interval = setInterval(() => {
-        previewMessages.push({...user, message: faker.lorem.text()});
-      }, Math.max(10000, Math.floor(Math.random() * 200000)));
+        const message = faker.lorem.lines({ min: 1, max: 5 }); // faker.lorem.text()
+        previewMessages.push({...user, message });
+      }, Math.max(10000, Math.floor(Math.random() * 500000)));
 
       chatUsers.push(interval);
     }
@@ -158,7 +162,7 @@ export const Chat = ({ show, previewMode }: Props) => {
               <span className={`font-semibold cursor-pointer saturate-150 ${users[data.userId]}`}>
                 {data.mod 
                   ? <FaScroll className={'inline mb-0.5 mr-1 w-[18px] h-[18px] rounded text-green-400'}/>
-                  : <FaCrown className={`inline mb-0.5 mr-1 w-[18px] h-[18px] ${usersRank[data.userId]}`}/>
+                  : <FaCrown className={`inline mb-0.5 mr-1 w-[18px] h-[18px] saturate-[125%] ${usersRank[data.userId]}`}/>
                 }
                 {data.name ? data.name : 'Usuário ' + data.userId}:
               </span>
